@@ -15,7 +15,8 @@ def fav_songs(user_loved_music_info):
 
 
 @app.route('/username/<string:username>/<int:count>')
-def get_data(username="aman8055", count=1):
+@app.route('/username/<string:username>/', defaults={'count': 1})
+def get_data(username, count):
 
     lastfm_get_recent_track_api_url = f"https://ws.audioscrobbler.com/2.0/?method=user.getRecentTracks&user={username}&api_key=5b6c4cae3423fd676a2ca2c250e8ad05&format=json"
 
