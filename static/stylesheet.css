@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@200&display=swap');
+
+body {
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Barlow', sans-serif;
+    color: #fff;
+}
+
+.card-div {
+    margin-left: 0px;
+    padding: 10px;
+    width: 450px;
+    /* height: 135px; */
+    height: auto;
+    /* background-color: rgb(60, 58, 58); */
+    background-color: #202020;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.heading {
+    font-size: 15px;
+    margin: 0px;
+}
+
+a {
+    color: #fff;
+    -moz-transition: all 0.2s ease-in;
+    -o-transition: all 0.2s ease-in;
+    -webkit-transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in;
+}
+
+a:link { 
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+    color: white;
+}
+
+a:hover { 
+    text-decoration: none;
+    text-shadow:0px 0px 15px #fff;
+    -moz-transition: all 0.2s ease-in;
+    -o-transition: all 0.2s ease-in;
+    -webkit-transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in;
+}
+
+a:active {
+    text-decoration: none;
+}
+
+.icon {
+    color: red;
+}
+
+#uname {
+    float: right;
+}
+
+hr {
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
+}
+
+.scrobble-count {
+    font-size: 15px;
+    margin-bottom: 0.4em;
+}
+
+.song-name {
+    margin: 0px;
+    font-size: 14px;
+}
+
+.song-metadata {
+    display: block;
+    float: left;
+    height: 50px; 
+}
+
+.album-art {
+    margin-right:5px;
+    padding-top: 4px;
+}
+
+.song-detail {
+    margin-left: 5px;
+    width: 386px;
+}
