@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, render_template
-import requests, datetime
+import os, requests, datetime
 
 # Create Flask and Api object
 app = Flask(__name__)
@@ -18,9 +18,9 @@ def fav_songs(user_loved_music_info):
 @app.route('/username/<string:username>/', defaults={'count': 1})
 def get_data(username, count):
 
-    lastfm_get_recent_track_api_url = f"https://ws.audioscrobbler.com/2.0/?method=user.getRecentTracks&user={username}&api_key=5b6c4cae3423fd676a2ca2c250e8ad05&format=json"
+    lastfm_get_recent_track_api_url = f"https://ws.audioscrobbler.com/2.0/?method=user.getRecentTracks&user={username}&api_key={os.environ['LASTFM_API_KEY']}&format=json"
 
-    lastfm_loved_tracks_api_url = f"https://ws.audioscrobbler.com/2.0/?method=user.getLovedTracks&user={username}&api_key=5b6c4cae3423fd676a2ca2c250e8ad05&format=json"
+    lastfm_loved_tracks_api_url = f"https://ws.audioscrobbler.com/2.0/?method=user.getLovedTracks&user={username}&api_key={os.environ['LASTFM_API_KEY']}&format=json"
 
     try:
         recent_track_response = requests.get(lastfm_get_recent_track_api_url)
