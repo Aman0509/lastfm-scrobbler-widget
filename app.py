@@ -57,12 +57,22 @@ def get_data(username, count):
                     play_time = play_time[0].split(':')
                     if play_time[0] == '0':
                         play_time = play_time[1] + ' mins ago'
-                    else:
+                    elif play_time[0] == '1':
                         play_time = play_time[0] + ' hr ago'
+                    else:
+                        play_time = play_time[0] + ' hrs ago'
                 elif len(play_time) > 1:
                     days = float(play_time[0].split()[0])
-                    play_time = str(int(days * 0.00273973)) + ' yr ago'
-
+                    if days < 365:
+                        if int(days) == 1:
+                            play_time = str(int(days)) + ' day ago'
+                        else:
+                            play_time = str(int(days)) + ' days ago'
+                    else:
+                        if str(int(days * 0.00273973)) == '1':
+                            play_time = str(int(days * 0.00273973)) + ' yr ago'
+                        else:
+                            play_time = str(int(days * 0.00273973)) + ' yrs ago'
             song_info['now_playing'] = now_playing
             song_info['play_time'] = play_time
 
