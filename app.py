@@ -27,62 +27,65 @@ def get_data(username, count):
         loved_response = requests.get(lastfm_loved_tracks_api_url)
 
         recent_track_response.raise_for_status()
-        user_loved_music_info = loved_response.json()
+        loved_response.raise_for_status()
 
+        user_loved_music_info = loved_response.json()
         user_music_info = recent_track_response.json()
+
         uname = user_music_info['recenttracks']['@attr']['user']
         total_scrobble_count = user_music_info['recenttracks']['@attr']['total']
 
         user_fav_song_list = fav_songs(user_loved_music_info)
-
         user_data_list = []
 
+        if user_music_info['recenttracks']['track']:
+            for i in range(count):
 
-        for i in range(count):
+                song_info = {}
+                song_info['song_name'] = user_music_info['recenttracks']['track'][i]['name']
+                song_info['artist_name'] = user_music_info['recenttracks']['track'][i]['artist']['#text']
+                song_info['album_image'] = user_music_info['recenttracks']['track'][i]['image'][0]['#text']
 
-            song_info = {}
-            song_info['song_name'] = user_music_info['recenttracks']['track'][i]['name']
-            song_info['artist_name'] = user_music_info['recenttracks']['track'][i]['artist']['#text']
-            song_info['album_image'] = user_music_info['recenttracks']['track'][i]['image'][0]['#text']
-
-            if '@attr' in user_music_info.get('recenttracks').get('track')[i]:
-                now_playing = True
-                play_time = "scrobbling now"
-            else:
-                now_playing = False
-                song_time = datetime.datetime.fromtimestamp(int(user_music_info['recenttracks']['track'][i]['date']['uts']))
-                current_time_utc = datetime.datetime.now()
-                play_time = str(current_time_utc - song_time).split(',')
-                if len(play_time) == 1:
-                    play_time = play_time[0].split(':')
-                    if play_time[0] == '0':
-                        play_time = play_time[1] + ' mins ago'
-                    elif play_time[0] == '1':
-                        play_time = play_time[0] + ' hr ago'
-                    else:
-                        play_time = play_time[0] + ' hrs ago'
-                elif len(play_time) > 1:
-                    days = float(play_time[0].split()[0])
-                    if days < 365:
-                        if int(days) == 1:
-                            play_time = str(int(days)) + ' day ago'
+                if '@attr' in user_music_info.get('recenttracks').get('track')[i]:
+                    now_playing = True
+                    play_time = "scrobbling now"
+                else:
+                    now_playing = False
+                    song_time = datetime.datetime.fromtimestamp(int(user_music_info['recenttracks']['track'][i]['date']['uts']))
+                    current_time_utc = datetime.datetime.now()
+                    play_time = str(current_time_utc - song_time).split(',')
+                    if len(play_time) == 1:
+                        play_time = play_time[0].split(':')
+                        if play_time[0] == '0':
+                            play_time = play_time[1] + ' mins ago'
+                        elif play_time[0] == '1':
+                            play_time = play_time[0] + ' hr ago'
                         else:
-                            play_time = str(int(days)) + ' days ago'
-                    else:
-                        if str(int(days * 0.00273973)) == '1':
-                            play_time = str(int(days * 0.00273973)) + ' yr ago'
+                            play_time = play_time[0] + ' hrs ago'
+                    elif len(play_time) > 1:
+                        days = float(play_time[0].split()[0])
+                        if days < 365:
+                            if int(days) == 1:
+                                play_time = str(int(days)) + ' day ago'
+                            else:
+                                play_time = str(int(days)) + ' days ago'
                         else:
-                            play_time = str(int(days * 0.00273973)) + ' yrs ago'
-            song_info['now_playing'] = now_playing
-            song_info['play_time'] = play_time
+                            if str(int(days * 0.00273973)) == '1':
+                                play_time = str(int(days * 0.00273973)) + ' yr ago'
+                            else:
+                                play_time = str(int(days * 0.00273973)) + ' yrs ago'
+                song_info['now_playing'] = now_playing
+                song_info['play_time'] = play_time
 
-            if song_info['song_name'] in user_fav_song_list:
-                loved = True
-            else:
-                loved = False
+                if song_info['song_name'] in user_fav_song_list:
+                    loved = True
+                else:
+                    loved = False
 
-            song_info['loved'] = loved
-            user_data_list.append(song_info)
+                song_info['loved'] = loved
+                user_data_list.append(song_info)
+        else:
+            return render_template('widget.html', uname=uname, total_scrobble_count=total_scrobble_count)
 
     except requests.exceptions.ConnectionError:
         return jsonify(error="no internet connection")
